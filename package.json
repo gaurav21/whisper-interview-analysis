@@ -1,12 +1,22 @@
 {
 	"name": "whisper-tutorial",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"private": true,
+	"description": "Production-ready multi-worker interview transcription and analysis system",
 	"scripts": {
-		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
-		"start": "wrangler dev",
-		"test": "vitest",
+		"dev:analysis": "wrangler dev --config wrangler-analysis.jsonc --port 8788",
+		"dev:free": "wrangler dev --config wrangler-free.jsonc",
+		"deploy": "wrangler deploy",
+		"deploy:analysis": "wrangler deploy --config wrangler-analysis.jsonc",
+		"deploy:all": "npm run deploy && npm run deploy:analysis",
+		"deploy:free": "wrangler deploy --config wrangler-free.jsonc",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
+		"typecheck": "tsc --noEmit",
+		"setup": "./scripts/setup-cloudflare.sh",
+		"migrate": "wrangler d1 execute whisper-db --file=migrations/0001_initial_schema.sql",
 		"cf-typegen": "wrangler types"
 	},
 	"devDependencies": {

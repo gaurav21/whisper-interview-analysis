@@ -1,0 +1,43 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "whisper-transcription-free",
+	"main": "src/workers/transcription-sync.ts",
+	"compatibility_flags": ["nodejs_compat"],
+	"compatibility_date": "2025-12-25",
+	"observability": {
+		"enabled": true
+	},
+	
+	// AI binding for Whisper transcription
+	"ai": {
+		"binding": "AI"
+	},
+	
+	// D1 database for structured data (transcripts stored here)
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "whisper-db",
+			"database_id": "8b0870f8-d275-470d-ac98-c6d5e7982f29",
+			"preview_database_id": "8b0870f8-d275-470d-ac98-c6d5e7982f29"
+		}
+	],
+	
+	// KV for caching
+	"kv_namespaces": [
+		{
+			"binding": "CACHE",
+			"id": "1ab4b592909d4fa1806273e6e47c020b",
+			"preview_id": "1ab4b592909d4fa1806273e6e47c020b"
+		}
+	],
+	
+	// Environment variables
+	"vars": {
+		"ENVIRONMENT": "production"
+	}
+	
+	// Note: Set OPENAI_API_KEY as a secret:
+	// wrangler secret put OPENAI_API_KEY --config wrangler-free.jsonc
+}
+

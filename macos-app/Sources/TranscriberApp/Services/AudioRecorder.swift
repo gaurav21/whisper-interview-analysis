@@ -119,6 +119,7 @@ final class SystemAudioRecorder: NSObject, SCStreamOutput {
     private var writer: AVAssetWriter?
     private var writerInput: AVAssetWriterInput?
     private var didStartWriting = false
+    private let screenOutput = NoopScreenOutput()
 
     init(outputURL: URL, sampleRate: Double, channels: Int) {
         self.outputURL = outputURL
@@ -153,6 +154,7 @@ final class SystemAudioRecorder: NSObject, SCStreamOutput {
         self.writerInput = input
 
         let stream = SCStream(filter: filter, configuration: configuration, delegate: nil)
+        try stream.addStreamOutput(screenOutput, type: .screen, sampleHandlerQueue: DispatchQueue(label: "screen-noop-queue"))
         try stream.addStreamOutput(self, type: .audio, sampleHandlerQueue: DispatchQueue(label: "system-audio-queue"))
         try await stream.startCapture()
         self.stream = stream
@@ -182,6 +184,12 @@ final class SystemAudioRecorder: NSObject, SCStreamOutput {
         if input.isReadyForMoreMediaData {
             input.append(sampleBuffer)
         }
+    }
+}
+
+private final class NoopScreenOutput: NSObject, SCStreamOutput {
+    func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, of type: SCStreamOutputType) {
+        // Intentionally ignore screen frames to avoid stream output warnings.
     }
 }
 

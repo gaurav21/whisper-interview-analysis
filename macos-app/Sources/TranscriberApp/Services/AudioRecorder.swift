@@ -135,7 +135,6 @@ final class SystemAudioRecorder: NSObject, SCStreamOutput {
         let filter = SCContentFilter(display: display, excludingWindows: [])
         let configuration = SCStreamConfiguration()
         configuration.capturesAudio = true
-        configuration.capturesVideo = false
         configuration.sampleRate = Int(sampleRate)
         configuration.channelCount = channels
 
